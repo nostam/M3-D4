@@ -41,6 +41,15 @@ window.onload = () => {
       });
     }
   };
+  const searchBooks = (data) => {
+    let input = document.querySelector(".form-control");
+
+    input.addEventListener("input", function (e) {
+      input.value.length > 2
+        ? console.log("searching sth...")
+        : console.log("give me more");
+    });
+  };
   const addBooks = function (data) {
     let tmp = document.createElement("div");
     tmp.classList = "container row no-gutter";
@@ -51,6 +60,7 @@ window.onload = () => {
     document.querySelector(".container").appendChild(tmp);
     addToCart(data);
     skipBook();
+    searchBooks(data);
   };
   const loadBooks = function () {
     fetch("https://striveschool-api.herokuapp.com/books")
