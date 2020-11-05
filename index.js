@@ -45,9 +45,10 @@ window.onload = () => {
     let input = document.querySelector(".form-control");
 
     input.addEventListener("input", function (e) {
-      input.value.length > 2
-        ? console.log("searching sth...")
-        : console.log("give me more");
+      if (input.value.length > 2) {
+        let result = data.map((d) => d.filter(input.value));
+        console.log(result);
+      }
     });
   };
   const addBooks = function (data) {
