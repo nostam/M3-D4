@@ -11,6 +11,7 @@ const createCards = function (asin, title, img, price, index) {
 		<h5 class="card-title">${title}</h5>
 		<p class="card-text">ASIN : ${asin}</p>
 		<a href="#" class="btn btn-info">$ ${price}</a>
+		<button type="button" class="btn btn-warning">skip</button>
 		<button type="button" class="btn btn-primary">Add to cart</button>
 	  </div>
 	</div>`;
@@ -18,7 +19,6 @@ const createCards = function (asin, title, img, price, index) {
 
 window.onload = () => {
   const addToCart = (data) => {
-    // console.table(data);
     let cards = document.getElementsByClassName("card");
     let addToCartBtn = document.getElementsByClassName("btn-primary");
     let cart = document.querySelector(".cart");
@@ -32,6 +32,15 @@ window.onload = () => {
       });
     }
   };
+  const skipBook = () => {
+    let cards = document.getElementsByClassName("card");
+    let skipBtn = document.getElementsByClassName("btn-warning");
+    for (let i = 0; i < 50; i++) {
+      skipBtn[i].addEventListener("click", function () {
+        cards[i].remove();
+      });
+    }
+  };
   const addBooks = function (data) {
     let tmp = document.createElement("div");
     tmp.classList = "container row no-gutter";
@@ -40,9 +49,8 @@ window.onload = () => {
         (tmp.innerHTML += createCards(d.asin, d.title, d.img, d.price, index))
     );
     document.querySelector(".container").appendChild(tmp);
-    let cards = document.getElementsByClassName("card");
-    let addToCartBtn = document.getElementsByClassName("btn-primary");
     addToCart(data);
+    skipBook();
   };
   const loadBooks = function () {
     fetch("https://striveschool-api.herokuapp.com/books")
