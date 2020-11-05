@@ -22,7 +22,7 @@ window.onload = () => {
     let cards = document.getElementsByClassName("card");
     let addToCartBtn = document.getElementsByClassName("btn-primary");
     let cart = document.querySelector(".cart");
-    for (let i = 0; i < 50; i++) {
+    for (let i = 0; i < addToCartBtn.length; i++) {
       addToCartBtn[i].addEventListener("click", function () {
         cards[i].style.background = "grey";
         cart.classList.remove("d-none");
@@ -35,25 +35,38 @@ window.onload = () => {
   const skipBook = () => {
     let cards = document.getElementsByClassName("card");
     let skipBtn = document.getElementsByClassName("btn-warning");
-    for (let i = 0; i < 50; i++) {
+    for (let i = 0; i < skipBtn.length; i++) {
       skipBtn[i].addEventListener("click", function () {
         cards[i].remove();
       });
     }
   };
-  const searchBooks = (data) => {
+  const searchBooks = (titles) => {
     let input = document.querySelector(".form-control");
-
+    console.log(titles);
     input.addEventListener("input", function (e) {
       if (input.value.length > 2) {
-        let result = data.map((d) => d.filter(input.value));
+        console.log("searching", input.value);
+        // fussy search, Pant returns true
+        let result = titles.some((t) => (t = input.value));
         console.log(result);
       }
     });
   };
   const addBooks = function (data) {
     let tmp = document.createElement("div");
-    tmp.classList = "container row no-gutter";
+    // building an titles array here
+    let titles = [];
+    data.forEach((o) =>
+      titles.push(
+        Object.entries(o)
+          .filter((e) => e[0] === "title")
+          .map((e) => e[1])
+      )
+    );
+    titles = titles.flat();
+    tmp.classList += "container row no-gutter";
+    // this foreach can take some time
     data.forEach(
       (d, index) =>
         (tmp.innerHTML += createCards(d.asin, d.title, d.img, d.price, index))
@@ -61,10 +74,10 @@ window.onload = () => {
     document.querySelector(".container").appendChild(tmp);
     addToCart(data);
     skipBook();
-    searchBooks(data);
+    searchBooks(titles);
   };
   const loadBooks = function () {
-    fetch("https://striveschool-api.herokuapp.com/books")
+    fetch("https://striveschool-api.herokuapp.com/books", { method: "GET" })
       .then(handleErrors)
       .then((response) => response.json())
       .then((data) => addBooks(data))
